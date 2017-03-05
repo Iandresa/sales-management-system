@@ -1,63 +1,22 @@
-<?php
-/**
- * This file is a part of MyWebSQL package
- *
- * @file:      modules/enginetype.php
- * @author     Samnan ur Rehman
- * @copyright  (c) 2008-2011 Samnan ur Rehman
- * @web        http://mywebsql.net
- * @license    http://mywebsql.net/license
- */
- 
-	function processRequest(&$db) {
-	
-		$action = v($_REQUEST["id"]);
-		include("lib/tableeditor.php");
-		$editor = new tableEditor($db);
-		$editor->setName(v($_REQUEST["name"]));
-		$editor->loadTable(false, false, true);
-		
-		$message = '';
-		if ($action == "alter") {
-			$result = alterTableEngine($db, v($_REQUEST["enginetype"]), $editor);
-			$formatted_query = preg_replace("/[\\n|\\r]?[\\n]+/", "<br>", htmlspecialchars($editor->getSql()));
-			if ($result) {
-				$message = 
-					'<div id="message">'
-					.'<div class="message ui-state-default">'.__('The command executed successfully').'.</div>'
-					//.'<div class="sql-text ui-state-default">'.$formatted_query.'</div>'
-					.'</div>';
-			} else {
-				$message = 
-					'<div id="message">'
-					.'<div class="message ui-state-error">'.__('Error occurred while executing the query').':</div>'
-					.'<div class="message ui-state-highlight">'.htmlspecialchars($db->getError()).'</div>'
-					.'<div class="sql-text ui-state-error">'.$formatted_query.'</div>'
-					.'</div>';
-			}
-		}
-		
-		$props = $editor->getProperties();
-		include('lib/html.php');
-		$engines = html::arrayToOptions($db->getEngines(), $props->engine, true);
-		$replace = array(
-			'TABLE_NAME' => htmlspecialchars($editor->getName()),
-			'ENGINE' => $engines,
-			'MESSAGE' => $message,
-		);
-		echo view('enginetype', $replace);
-	}
-	
-	function alterTableEngine(&$db, $engineType, &$editor) {
-		$props = $editor->getProperties();
-		$props->engine = $engineType;
-		$editor->setProperties($props);
-		
-		$sql = $editor->getAlterStatement();
-		
-		if (!$db->query($sql))
-			return false;
-	
-		return true;
-	}
-?>
+<link href='cache.php?css=theme,default,alerts,grid' rel="stylesheet" />
+<div id="popup_wrapper">
+	<div id="popup_contents">
+		{{MESSAGE}}
+		<div id="grid-tabs" class="padded">
+			<div class="input"><span><?php echo __('Table Engine (type)'); ?>:</span><span><select name="enginetype" id="enginetype">{{ENGINE}}</select><span></div>
+		</div>
+	</div>
+	<div id="popup_footer">
+		<div id="popup_buttons">
+			<input type='button' id="btn_alter" value='<?php echo __('Submit'); ?>' />
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" language='javascript' src="cache.php?script=common,jquery,ui,query,options"></script>
+<script type="text/javascript" language='javascript'>
+window.title = "<?php echo __('Change Table Type'); ?>";
+$('#btn_alter').button().click(function() {
+	wrkfrmSubmit('enginetype', 'alter', '{{TABLE_NAME}}', '')
+});
+</script>

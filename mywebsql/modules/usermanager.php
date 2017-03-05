@@ -1,157 +1,92 @@
-<?php
-/**
- * This file is a part of MyWebSQL package
- *
- * @file:      modules/usermanager.php
- * @author     Samnan ur Rehman
- * @copyright  (c) 2008-2011 Samnan ur Rehman
- * @web        http://mywebsql.net
- * @license    http://mywebsql.net/license
- */
+<link href='cache.php?css=theme,default,alerts,grid' rel="stylesheet" />
 
-	function processRequest(&$db) {
-		$action = v($_REQUEST["id"]);
-		include("lib/usermanager.php");
-		$legacyServer = Session::get('db', 'version') < 5;
-		$editor = new userManager($db, $legacyServer);
-		$message = '';
-		
-		if ($action != '') {
-			if ($action == "add")
-				$result = addUser($db, v($_REQUEST["query"]), $editor);
-			else if ($action == "delete")
-				$result = deleteUser($db, v($_REQUEST["query"]), $editor);
-			else if ($action == "update")
-				$result = updateUser($db, v($_REQUEST["query"]), $editor);
+<style>
+	#db_names option		{ padding: 3px 6px; }
+</style>
 
-			if ($result) {
-				$db->flush('PRIVILEGES', true);
-				$message = __('The command executed successfully');
+<div id="popup_wrapper" style="display:none">
+	<div id="popup_contents">
+		<div class="input" id="button-list">
+			<span><?php echo __('Select a User'); ?>:</span><span><select name="userlist" id="userlist">{{USERS}}</select></span>
+			<span><input type='button' id='btn_del' value='<?php echo __('Delete selected User'); ?>' /></span>
+			<span><input type='button' id='btn_add' value='<?php echo __('Add User'); ?>' /></span>
+		</div>
+
+		<div id="grid-tabs">
+			<div id="grid-messages">{{MESSAGE}}</div>
+			<ul>
+				<li><a href="#tab-general"><?php echo __('User Information'); ?></a></li>
+				<li><a href="#tab-global"><?php echo __('Global Privileges'); ?></a></li>
+				<li><a href="#tab-db"><?php echo __('Database Privileges'); ?></a></li>
+			</ul>
+			<div class="ui-corner-bottom">
+				<div id="tab-general">
+					<div class="input"><span><?php echo __('User Name'); ?>:</span><span><input type="text" size="30" name="username" id="username" /><span></div>
+					<div class="input"><span><?php echo __('Host'); ?>:</span><span><input type="text" size="30" name="hostname" id="hostname" /><span></div>
+					<div class="input"><span><?php echo __('Password'); ?>:</span><span><input autocomplete="off" type="password" size="30" name="userpass" id="userpass" /><span></div>
+					<div class="input"><span><?php echo __('Confirm Password'); ?>:</span><span><input autocomplete="off" type="password" size="30" name="userpass2" id="userpass2" /><span></div>
+					<div class="input"><span><input type="checkbox" name="nopass" id="nopass" /><label class="right" for="nopass"><?php echo __('Remove Password'); ?></label></span></div>
+				</div>
+				<div id="tab-global">
+					&nbsp;
+				</div>
+				<div id="tab-db">
+					&nbsp;
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="popup_footer">
+		<div id="popup_buttons">
+			<div id="checkboxes" style="float:left"><input type="checkbox" name="selectall" id="selectall"><label class="right" for="selectall"><?php echo __('Select All/None'); ?></label></div>
+			<div style="float:right"><input type='button' id='btn_cancel' value='<?php echo __('Cancel'); ?>' /></div>
+			<div style="float:right"><input type='button' id='btn_add2' value='<?php echo __('Add User'); ?>' /></div>
+			<div style="float:right"><input type='button' id='btn_submit' value='<?php echo __('Update User'); ?>' tabindex="1" /></div>
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript" language='javascript' src="cache.php?script=common,jquery,ui,editable,position,query,cookies,settings,alerts,users"></script>
+<script type="text/javascript" language="javascript">
+window.title = "<?php echo __('User Manager')?>";
+
+var USER_INFO = {{USER_INFO}};
+var DATABASES = {{DATABASES}};
+var PRIVILEGES = {{PRIVILEGES}};
+var DB_PRIVILEGES = {{DB_PRIVILEGES}};
+var PRIVILEGE_NAMES = {{PRIVILEGE_NAMES}};
+var DB_PRIVILEGE_NAMES = {{DB_PRIVILEGE_NAMES}};
+
+$(function() {
+	$('#grid-tabs').tabs({
+		select: function(event, ui) {
+			if (ui.index == 0)
+				$('#checkboxes').hide();
+			else if ( (ui.index == 2 && !$('#db_names').val()) )
+				$('#checkboxes').hide();
+			else {
+				$('#checkboxes').show();
+				cls = (ui.index==1) ? '#tab-global .prv' : '#tab-db .dbprv';
+				$('#selectall').attr('checked', $(cls).not(':checked').length == 0);
 			}
-			else
-				$message = __('Error occurred while executing the query');
-		}
-	
-		displayUserForm($db, $editor, $message, $action);
-	}
-	
-	function displayUserForm(&$db, &$editor, $message, $action) {
-		$dbList = $db->getDatabases();			
-		$userList = $editor->getUsersList();
-		$privilegeNames = Privileges::getNames();
-		$dbPrivilegeNames = DbPrivileges::getNames();
-		
-		// current user name is not plaintext in case of 'update' action 
-		$userName = '';
-		if ($action == 'update') {
-			$obj = json_decode(v($_REQUEST['query']));
-			if (is_object($obj))
-				$userName = $obj->username . '@' . $obj->hostname;
-		} else
-			$userName = v($_REQUEST['query']);
-		
-		$currentUser = selectUser($userList, $userName);
-		$privileges  = array();
-		$dbPrivileges = array();
-		$userInfo = array();
-		if ($currentUser) {
-			$privileges = $currentUser->getGlobalPrivileges();
-			foreach($dbList as $db_name)
-				$dbPrivileges[$db_name] = $currentUser->getDbPrivileges($db_name);
-		
-			$userInfo = array('username' => $currentUser->userName, 'host' => $currentUser->host);
-		}
-		$users = userOptions($userList, $currentUser);
-			
-		$replace = array(
-			'ID' => v($_REQUEST["id"]) ? htmlspecialchars($_REQUEST["id"]) : '',
-			'MESSAGE' => $message,
-			'USERS' => $users,
-			'USER_INFO' => json_encode($userInfo),
-			'DATABASES' => json_encode($dbList),
-			'PRIVILEGES' => json_encode($privileges),
-			'DB_PRIVILEGES' => json_encode($dbPrivileges),
-			'PRIVILEGE_NAMES' => json_encode($privilegeNames),
-			'DB_PRIVILEGE_NAMES' => json_encode($dbPrivilegeNames)
-		);
-		echo view('usermanager', $replace);
-	}
-	
-	function selectUser($list, $user) {
-		foreach($list as $obj) {
-			$name = $obj->userName . '@' . $obj->host;
-			if ($user == $name)
-				return $obj;
-		}
-		
-		$obj = count($list) > 0 ? $list[0] : NULL;
-		return $obj;
-	}
-	
-	function addUser(&$db, $info, &$editor) {
-		$info = json_decode($info);
-		
-		if (!is_object($info))
-			return false;
-		
-		return $editor->add($info->username, $info->hostname, $info->pwd);
-	}
-	
-	function deleteUser(&$db, $info, &$editor) {
-		$info = json_decode($info);
-		
-		if (!is_object($info))
-			return false;
-		
-		return $editor->delete($info->username, $info->host);
-	}
-	
-	function updateUser(&$db, $info, &$editor) {
-		$info = json_decode($info);
-		if (!is_object($info))
-			return false;
-		
-		// only change user info if it requires update
-		if ($info->oldusername != $info->username || $info->oldhostname != $info->hostname) {
-			$result = $editor->update($info->oldusername, $info->oldhostname, $info->username, $info->hostname);
-			if (!$result)
-				return false;
-		}
-		
-		// change password only if requested
-		if (isset($info->password) && $info->password != '') {
-			$result = $editor->updatePassword($info->username, $info->hostname, $info->password);
-			if (!$result)
-				return false;
-		} else if (isset($info->removepass) && $info->removepass == '1') {
-			$result = $editor->updatePassword($info->username, $info->hostname, '');
-			if (!$result)
-				return false;
-		}
-		
-		$user = $editor->getUser($info->username, $info->hostname);
-		$user->setGlobalPrivileges($info->privileges);
-		
-		$dbList = $db->getDatabases();
-		foreach($dbList as $db_name) {
-			$result = $user->setDbPrivileges($db_name, isset($info->db_privileges->$db_name) ? $info->db_privileges->$db_name : array() );
-			if (!$result)
-				return false;
-		}
-		
-		return true;
-	}
-	
-	function userOptions($array, $selected) {
-		$str = $selected == '' ? '<option value="">- - -</option>' : '';
-		foreach($array as $user) {
-			$name = $user->userName . '@' . $user->host;
-			if ($selected->userName == $user->userName && $selected->host == $user->host)
-				$str .= '<option selected="selected" value="'.htmlspecialchars($name).'">'.htmlspecialchars($name).'</option>';
-			else
-				$str .= '<option value="'.htmlspecialchars($name).'">'.htmlspecialchars($name).'</option>';
-		}
-		
-		return $str;
-	}
-?>
+		} 
+	});
+	$('#userlist').change(selectUser);
+	$('#btn_add').button().click(addUser);
+	$('#btn_del').button().click(deleteUser);
+	$('#btn_cancel').button().click(cancelOperation).hide();
+	$('#btn_add2').button().click(addNewUser).hide();
+	$('#btn_submit').button().click(updateUser);
+	$('#selectall').click(selectAll);
+	$('#nopass').click(function() {
+		checked = $(this).attr('checked');
+		if (checked)
+			$('#userpass,#userpass2').attr('disabled', 'disabled');
+		else
+			$('#userpass,#userpass2').removeAttr('disabled');
+	});
+	loadUserData();
+});
+</script>
