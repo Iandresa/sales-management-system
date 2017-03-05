@@ -1,49 +1,95 @@
-<link href='cache.php?css=theme,default' rel="stylesheet" />
-	<input type='hidden' name='q' value="wrkfrm" />
-	<input type='hidden' name='type' value="objcreate" />
-	<input type='hidden' name='id' value="{{ID}}" />
+<?php
+/**
+ * This file is a part of MyWebSQL package
+ *
+ * @file:      modules/objcreate.php
+ * @author     Samnan ur Rehman
+ * @copyright  (c) 2008-2011 Samnan ur Rehman
+ * @web        http://mywebsql.net
+ * @license    http://mywebsql.net/license
+ */
 
-<div id="popup_wrapper">
-	<div id="popup_contents">
-		<div class="{{MESSAGE_TYPE}}">{{MESSAGE}}</div>
+	function processRequest(&$db)	{
+		$refresh = false;
+		$type = "message ui-state-highlight";
+		if (isset($_REQUEST["objinfo"])) {
+			$msg = createDatabaseObject($db, $_REQUEST["id"], $_REQUEST["objinfo"]);
+			if (!$msg) {		// msg will be returned only if error (bad programming guys, dont learn from it !)
+				$msg = __('The command executed successfully');
+				$type = "message ui-state-default";
+				$refresh = true;
+			}
+			else
+				$type="message ui-state-error";
+		}
+		else
+			$msg = __('Any existing object with the same name should be dropped manually before executing the creation command')
+				.'!<br />'
+				.__('Enter command for object creation');
+		displayCreateObjectForm($msg, $type, $refresh);
+	}
 
-		<div class="code-editor">
-			<textarea cols="86" rows="16" name="objinfo" id="objinfo" class="text-editor">{{OBJINFO}}</textarea>
-		</div>
-	</div>
+	function displayCreateObjectForm($msg, $type, $refresh) {
+		$id = $_REQUEST["id"];
+		if (isset($_REQUEST["objinfo"]))
+			$objInfo = htmlspecialchars($_REQUEST["objinfo"]);
+		else
+			$objInfo = getObjectCreateCommand($id);
+		print "</textarea></td></tr>";
 
-	<div id="popup_footer">
-		<div id="popup_buttons">
-			<input type="button" id="btn-submit" value="<?php echo __('Submit'); ?>" />
-		</div>
-	</div>
-</div>
+		$min = file_exists('js/min/minify.txt');
+		$js = $min ? 'codemirror' : 'editor/codemirror';
+		$editor_link = "<script type=\"text/javascript\" language=\"javascript\" src=\"cache.php?script=$js\"></script>";
+		$editor_options = $min ? 'basefiles: ["js/min/codemirror_base.js"]' : 'parserfile: "mysql.js", path: "js/editor/"';
 
-<script type="text/javascript" language='javascript' src="cache.php?script=common,jquery,ui"></script>
-{{EDITOR_LINK}}
-<script type="text/javascript" language="javascript">
-window.title = "<?php echo __('Create new database object'); ?>";
-var code_editor = null;
-$(function() {
-	document.frmquery.objinfo.focus();
-	code_editor = CodeMirror.fromTextArea('objinfo', { {{EDITOR_OPTIONS}},
-		width: '100%', height: '320px', tabMode : 'default',
-		stylesheet: 'cache.php?css=mysqlcolors', onLoad : function() { }
-	});
-	$('#btn-submit').button().click(submit_form);
-	if ("{{MESSAGE_TYPE}}" == "success")
-		parent.objectsRefresh();
-});
+		$replace = array('ID' => htmlspecialchars($id),
+								'MESSAGE' => $msg,
+								'MESSAGE_TYPE' => $type,
+								'OBJINFO' => $objInfo,
+								'EDITOR_LINK' => $editor_link,
+								'EDITOR_OPTIONS' => $editor_options,
+								'REFRESH' => $refresh ? '1' : '0'
+							);
 
-function submit_form() {
-	if(code_editor)
-		document.frmquery.objinfo.value = code_editor.getCode();
-	document.frmquery.submit();
-}
+		echo view('objcreate', $replace);
+	}
 
-if ({{REFRESH}})
-	window.parent.objectsRefresh();
-</script>
-</script>
+	function getObjectCreateCommand($id) {
+		$folder = Session::get('db', 'driver') . '/templates';
 
+		$x = '';
+		switch($id) {
+			case 0:
+				$x = view(array($folder.'/table', 'templates/table')); break;
+			case 1:
+				$x = view(array($folder.'/view', 'templates/view')); break;
+			case 2:
+				$x = view(array($folder.'/procedure', 'templates/procedure')); break;
+			case 3:
+				$x = view(array($folder.'/function', 'templates/function')); break;
+			case 4:
+				$x = view(array($folder.'/trigger', 'templates/trigger')); break;
+			case 5:
+				$x = view(array($folder.'/event', 'templates/event')); break;
+		}
+		return htmlspecialchars($x);
+	}
 
+	function createDatabaseObject(&$db, $id, $info) {
+		$cmd = trim($info);
+		if (strtolower(substr($cmd, 0, 6)) != "create")
+			return __('Only create commands are accepted');
+
+		if (!$db->query($cmd))
+			return htmlspecialchars($db->getError());
+
+		$warnings = $db->getWarnings();
+		if (count($warnings) > 0) {
+			foreach($warnings as $code=>$warning)
+				return htmlspecialchars($warning); // return the first warning (for this module always true)
+		}
+
+		return "";
+	}
+
+?>

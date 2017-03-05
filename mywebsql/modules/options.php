@@ -1,25 +1,49 @@
-<link href="cache.php?css=default,help" rel="stylesheet" />
-<script language="javascript" src="cache.php?script=jquery,options" type="text/javascript"></script>
-<div>
-	<table width='496px' class='maintb' border="0" cellspacing="0" cellpadding="0">
-	<tr>
-		<td width="120px" nowrap="nowrap" valign="top">
-			<table width="100%" border="0" cellspacing="0" cellpadding="2">
-			{{LINKS}}
-			</table>
-		</td>
-		<td valign="top">
-			<div class='content'>
-				{{CONTENT}}
-			</div>
-		</td>
-	</tr>
-	</table>
-</div>
+<?php
+/**
+ * This file is a part of MyWebSQL package
+ *
+ * @file:      modules/options.php
+ * @author     Samnan ur Rehman
+ * @copyright  (c) 2008-2011 Samnan ur Rehman
+ * @web        http://mywebsql.net
+ * @license    http://mywebsql.net/license
+ */
 
-<script type="text/javascript" language='javascript'>
-window.title = "<?php echo __('Options'); ?>";
-$(function() {
-	optionsLoad('{{PAGE}}');
-});
-</script>
+	function processRequest(&$db) {
+		$pages = array(	"editing"=>'Editing',
+								"misc"=>'Miscellaneous',
+						);
+
+		if ( v($_REQUEST["p"]) && array_key_exists(v($_REQUEST["p"]), $pages) )
+			$page = $_REQUEST["p"];
+		else
+			$page = "editing";
+
+		$links = '';
+		foreach($pages as $x=>$y) {
+			if ($page == $x)
+				$links .= "<tr><td class='sel'>
+					<table border=0 cellpadding=\"0\" cellspacing=\"0\">
+						<tr><td><img border=\"0\" align=\"middle\" src='options/t_$x".".gif' alt=\"\" alt=\"\" /></td>
+						<td nowrap\"nowrap\">&nbsp;$y</td></tr></table>
+					</td></tr>\n";
+			else
+				$links .= "<tr><td class='norm' onmouseover=\"hoverlink(this,0)\" onmouseout=\"hoverlink(this,1)\" onclick=\"showlink('$x')\">
+					<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">
+						<tr><td><img border=\"0\" align=\"middle\" src='options/t_$x".".gif' alt=\"\" /></td>
+						<td nowrap\"nowrap\">&nbsp;$y</td></tr></table>
+					</td></tr>\n";
+		}
+
+		$content = view("options.$page");
+
+		$replace = array('LINKS' => $links,
+								'CONTENT' => $content,
+								'PAGE' => $page
+							);
+
+		echo view('options', $replace);
+
+	}
+
+?>

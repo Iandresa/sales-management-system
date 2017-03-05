@@ -1,84 +1,73 @@
-<link href='cache.php?css=theme,default,grid,alerts,mysqlcolors' rel="stylesheet" />
+<?php
+/**
+ * This file is a part of MyWebSQL package
+ *
+ * @file:      modules/indexes.php
+ * @author     Samnan ur Rehman
+ * @copyright  (c) 2008-2011 Samnan ur Rehman
+ * @web        http://mywebsql.net
+ * @license    http://mywebsql.net/license
+ */
 
-<style type="text/css">
-	#indexlist	{ width:200px; padding:5px }
-	#indexlist option	{ padding:5px; font-family:arial; font-size: 12px; }
-	#dialog-list label { margin: 5px 10px; }
-	#dialog-list input[type="text"] { width: 100px; float: right }
-</style>
+	function processRequest(&$db) {
+		$action = v($_REQUEST["id"]);
+		include("lib/tableeditor.php");
+		$editor = new tableEditor($db);
+		$editor->setName(v($_REQUEST["name"]));
+		$editor->loadTable(true, true, false);
 
-<div id="popup_wrapper">
-	<div id="popup_contents">
-	<div class="padded"><?php echo __('For tables with large dataset, it is recommended to modify and save indexes one by one'); ?></div>
-		<div id="grid-tabs">
-		<div id="grid-messages">{{MESSAGE}}</div>
-			<ul>
-				<li><a href="#tab-indexes"><?php echo __('Table Indexes'); ?></a></li>
-				<li><a href="#tab-messages"><?php echo __('Messages'); ?></a></li>
-			</ul>
-			<div class="ui-corner-bottom">
-				<div id="tab-indexes">
-					<div style="width:210px;float:left;padding:10px">
-						<select name="indexlist" id="indexlist" size="10"><option name="dummy" value=""></option></select>
-					</div>
-					<div style="float:left; padding:10px">
-						<div id="indextype" style="text-align:right; padding:5px 0">
-							<input type='checkbox' id="chk_primary" name="chk_primary"><label class="right" for="chk_primary"><?php echo __('Primary'); ?></label>
-							&nbsp;&nbsp;&nbsp;<input type='checkbox' id="chk_unique" name="chk_unique"><label class="right" for="chk_unique"><?php echo __('Unique'); ?></label>
-							&nbsp;&nbsp;&nbsp;<input type='checkbox' id="chk_fulltext" name="chk_fulltext"><label class="right" for="chk_fulltext"><?php echo __('Full Text'); ?></label>
-						</div>
-						<table border="0" cellspacing="1" cellpadding="2" id="table_grid" width="100%"><tbody>
-							<tr id='fhead'>
-								<th style="width:30px">&nbsp;</th>
-								<th style="width:200px"><?php echo __('Field Name'); ?></th>
-								<th style="width:130px"><?php echo __('Data Type'); ?></th>
-							</tr>
-						</tbody></table>
-						<div style="text-align:right; padding:5px 0">
-							<input type='button' id='btn_addfield' value='<?php echo __('Add Field'); ?>' />
-							<input type='button' id='btn_delfield' value='<?php echo __('Delete Selected Field(s)'); ?>' />
-						</div>
-					</div>
-				</div>
-				<div id="tab-messages">
-					<?php echo __('Waiting for index information to be submitted'); ?>
-				</div>
-			</div>
-		</div>
-	</div>
+		if ($action == "alter")
+		{
+			$result = alterTableIndexes($db, v($_REQUEST["query"]), $editor);
+			$formatted_query = preg_replace("/[\\n|\\r]?[\\n]+/", "<br>", htmlspecialchars($editor->getSql()));
+			if ($result)
+				print
+					'<div id="result">1</div><div id="message">'
+					.'<div class="message ui-state-default">The command executed successfully.</div>'
+					.'<div class="sql-text ui-state-default">'.$formatted_query.'</div>'
+					.'</div>';
+			else				
+				print
+					'<div id="result">0</div><div id="message">'
+					.'<div class="message ui-state-error">Error occured while executing the query:</div>'
+					.'<div class="sql-text ui-state-error">'.$formatted_query.'</div>'
+					.'<div class="message ui-state-highlight">'.htmlspecialchars($db->getError()).'</div>'
+					.'</div>';
+		}
+		else
+			displayIndexesForm($db, $editor);
+	}
+	
+	function displayIndexesForm(&$db, &$editor)
+	{
+		$indexes = $editor->getIndexes();
+		$fields = $editor->getFields();
 
-	<div id="popup_footer">
-		<div id="popup_buttons">
-			<input type='button' id='btn_add' value='<?php echo __('Add Index'); ?>' />
-			<input type='button' id='btn_edit' value='<?php echo __('Edit Index'); ?>' />
-			<input type='button' id='btn_save' value='<?php echo __('Done'); ?>' />
-			<input type='button' id='btn_del' value='<?php echo __('Delete Selected Index'); ?>' />
-			<input type='button' id='btn_cancel' value='<?php echo __('Cancel'); ?>' />
-			<input type='button' id='btn_submit' value='<?php echo __('Save All Changes'); ?>' tabindex="1" />
-		</div>
-	</div>
-
-</div>
-
-<div id="dialog-list" title="<?php echo __('Field List'); ?>">
-	<div class="padded">
-		<div>
-			<select size="8" name="list-items" id="list-items"></select>
-		</div>
-		<div>
-			<label><?php echo __('Field Length'); ?>:</label><input type="text" name="flength" id="flength" class="text ui-widget-content" />
-		</div>
-	</div>
-</div>
-
-<script type="text/javascript" language='javascript' src="cache.php?script=common,jquery,ui,indexes,position,query,cookies,settings,alerts,hotkeys"></script>
-<script type="text/javascript" language="javascript">
-window.title = "<?php echo __('Index Manager'); ?>";
-var tableName = "{{TABLE_NAME}}";
-var fieldInfo = {{FIELDS}};
-var indexInfo = {{INDEXES}};
-
-$(function() {
-	setupIndexes();
-});
-</script>
+		$replace = array(
+						'ID' => v($_REQUEST["id"]) ? htmlspecialchars($_REQUEST["id"]) : '',
+						'MESSAGE' => __('Changes are not saved until you press [Save All Changes]'),
+						'INDEXES' => count($indexes) > 0 ? json_encode($indexes) : '{}',
+						'FIELDS' => json_encode($fields),
+						'TABLE_NAME' => htmlspecialchars($editor->getName())
+						);
+		echo view('indexes', $replace);
+	}
+	
+	function alterTableIndexes(&$db, $info, &$editor)
+	{
+		$info = json_decode($info);
+		
+		if (!is_object($info))
+			return false;
+		
+		if (v($info->indexes))
+			$editor->setIndexes($info->indexes);
+		
+		$sql = $editor->getAlterIndexStatement();
+		
+		if (!$db->query($sql))
+			return false;
+	
+		return true;
+	}
+?>

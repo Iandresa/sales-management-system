@@ -1,8 +1,22 @@
-<div id='results'>
-	<div class='heading1'><?php echo __('Table information'); ?></div>
-	
-</div>
+<?php
+/**
+ * This file is a part of MyWebSQL package
+ *
+ * @file:      modules/infodb.php
+ * @author     Samnan ur Rehman
+ * @copyright  (c) 2008-2011 Samnan ur Rehman
+ * @web        http://mywebsql.net
+ * @license    http://mywebsql.net/license
+ */
 
-<script type="text/javascript" language="javascript">
-parent.transferInfoMessage();
-</script>
+	function processRequest(&$db) {
+		if (getDbName() == '') {
+			echo view('invalid_request');
+			return;
+		}
+		
+		if ($db->queryTableStatus())
+			createSimpleGrid($db, __('Database summary').': ['.htmlspecialchars(getDbName()).']');
+	}
+	
+?>

@@ -1,22 +1,42 @@
-<script type="text/javascript" language='javascript' src="cache.php?script=jquery"></script>
-<div id="results">
-	<div class="message ui-state-default"><?php echo __('New database successfully created'); ?> [ {{DB_NAME}} ]</div>
-</div>
+<?php
+/**
+ * This file is a part of MyWebSQL package
+ *
+ * @file:      modules/dbcreate.php
+ * @author     Samnan ur Rehman
+ * @copyright  (c) 2008-2011 Samnan ur Rehman
+ * @web        http://mywebsql.net
+ * @license    http://mywebsql.net/license
+ */
+	function processRequest(&$db) {
+		Session::del('select', 'result');
+		Session::del('select', 'pkey');
+		Session::del('select', 'ukey');
+		Session::del('select', 'mkey');
+		Session::del('select', 'unique_table');
+		
+		Session::set('select', 'result', array());
 
-<script type="text/javascript" language='javascript'>
-	parent.addCmdHistory("{{SQL}}");
-	parent.transferResultMessage(-1, '{{TIME}}', '<?php echo __('New database successfully created'); ?>');
-	if ({{REDIRECT}})
-		parent.window.location = parent.window.location;
-	else {
-		parent.$('#dblist').append('<option name="{{DB_NAME}}">{{DB_NAME}}</option>');
-		var $r = parent.$("#dblist option");
-		$r.sort(function(a, b) {
-			if (a.text < b.text) return -1;
-			if (a.text == b.text) return 0;
-			return 1;
-		});
-		$($r).remove();
-      parent.$("#dblist").append( $( $r ) );
+		$dbName = $_REQUEST["name"];
+		$dbSelect = $_REQUEST["query"];
+
+		$sql = '';
+		if (!$db->createDatabase($dbName))
+			createErrorGrid($db);
+		else {
+			$redirect = '0';
+			if ($dbSelect) {
+				Session::set('db', 'changed', true);
+				Session::set('db', 'name', $dbName);
+				$redirect = '1';
+			}
+			$replace = array(
+				'DB_NAME' => htmlspecialchars($dbName),
+				'SQL' => preg_replace("/[\n\r]/", "<br/>", htmlspecialchars($sql)),
+				'TIME' => $db->getQueryTime(),
+				'REDIRECT' => $redirect
+			);
+			echo view( 'dbcreate', $replace );
+		}
 	}
-</script
+?>

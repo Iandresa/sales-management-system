@@ -1,28 +1,50 @@
-<link href="cache.php?css=theme,default,help" rel="stylesheet" />
+<?php
+/**
+ * This file is a part of MyWebSQL package
+ *
+ * @file:      modules/help.php
+ * @author     Samnan ur Rehman
+ * @copyright  (c) 2008-2011 Samnan ur Rehman
+ * @web        http://mywebsql.net
+ * @license    http://mywebsql.net/license
+ */
 
-<div id="popup_wrapper">
+	function processRequest(&$db) {
+		if (!v($_REQUEST["p"]))
+			$_REQUEST["p"] = "queries";
+		showHelpTopic($_REQUEST["p"]);
+	}
 
-	<div class="docinfo">
-		<?php echo str_replace('{{LINK}}', '', __('To see most up-to-date help contents, please visit {{LINK}}')); ?>
-		<a target="_blank" href="{{PROJECT_SITEURL}}/docs">MyWebSQL Online Documentation</a>
-	</div>
-	
-	<ul class="links">
-	{{LINKS}}
-	</ul>
-	<div class="content">
-	{{CONTENT}}
-	</div>
+	// ==========================================
+	function showHelpTopic($p) {
+		$pages = array(
+						"queries"=>'Executing queries',
+						"results"=>'Working with results',
+						"keyboard"=>'Keyboard shortcuts',
+						"prefs"=>'Preferences',
+						"misc"=>'Miscellaneous',
+						"credits"=>'Credits',
+						"about"=>'About'
+						);
 
-</div>
+		$links = '';
+		foreach($pages as $x=>$y) {
+			if ($p == $x)
+				$links .= "<li class=\"current\"><img border=\"0\" align=\"absmiddle\" src='img/help/t_$x".".gif' alt=\"\" />$y</li>";
+			else
+				$links .= "<li><a href=\"#$x\"><img border=\"0\" align=\"absmiddle\" src='img/help/t_$x".".gif' alt=\"\" />$y</a></li>";
+		}
+		
+		$page = $p . ".php";
+		$contents = view("help/$p");
 
-<script language="javascript" src="cache.php?script=jquery,help" type="text/javascript"></script>
-<script type="text/javascript" language="javascript">
-	window.title = "<?php echo __('Help'); ?>";
-	$(function() {
-		$('ul.links a').click(function() {
-			page = $(this).attr('href').replace('#', '');
-			showHelpPage(page);
-		});
-	});
-</script>
+		$replace = array(
+			'PROJECT_SITEURL' => PROJECT_SITEURL,
+			'LINKS' => $links,
+			'CONTENT' => $contents
+		);
+		
+		echo view('help', $replace);
+	}
+
+?>
