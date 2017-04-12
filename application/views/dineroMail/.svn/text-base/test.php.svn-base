@@ -1,0 +1,110 @@
+<?php $this->load->view("partial/header");
+$correo = explode("@",$email); 
+ 
+if ($telefono == " ") { 
+   $telefono = "1234567"; 
+} 
+$langEnd='-'.$this->config->item('language');
+$enterprise_id=$this->session->userdata('enterprise_id');
+$person_id=$this->session->userdata('person_id');
+$this->load->helper('dinero_mail'); 
+
+?>
+
+<center>
+     <h3>Test paying less possible!!!</h3>
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 ><TR><TD><TABLE Border=1 CellPadding=3 CellSpacing=1 style='text-align:center'>  <TR>	<TD>
+<?php echo $this->lang->line("adquire_modules_modules"); ?></TD><TD><?php echo $this->lang->line("adquire_modules_monthly"); ?></TD><TD><?php echo $this->lang->line("adquire_modules_semiannual"); ?></TD><TD><?php echo $this->lang->line("adquire_modules_annual"); ?></TD></TR>
+	<?php	
+		$this->load->helper('dinero_mail'); 
+		echo beginModuleRow($langEnd,'order');
+		echo MYpagomasterCartAddProduct("111".$enterprise_id,$langEnd,"501","Monthly Order module");
+		echo MYpagomasterCartAddProduct("112".$enterprise_id,$langEnd,"501","Semiannual Order module");
+		echo MYpagomasterCartAddProduct("113".$enterprise_id,$langEnd,"501","Annual Order module");
+		echo endModuleRow();
+		
+		echo beginModuleRow($langEnd,'delivery');
+	echo MYpagomasterCartAddProduct("121".$enterprise_id,$langEnd,"501","Monthly Delivery module");
+		echo MYpagomasterCartAddProduct("122".$enterprise_id,$langEnd,"501","Semiannual Delivery module");
+		echo MYpagomasterCartAddProduct("123".$enterprise_id,$langEnd,"501","Annual Delivery module");
+		echo endModuleRow();
+		
+		echo beginModuleRow($langEnd,'report');	
+ 	echo MYpagomasterCartAddProduct("131".$enterprise_id,$langEnd,"501","Monthly Report module");
+		echo MYpagomasterCartAddProduct("132".$enterprise_id,$langEnd,"501","Semiannual Report module");
+		echo MYpagomasterCartAddProduct("133".$enterprise_id,$langEnd,"501","Annual Report module");
+		echo endModuleRow();
+	
+	?>		
+	</TABLE>
+
+		</TD></TR>
+		<TR><TD ALIGN="center"></br>
+                        <?php
+ /*    
+$count=0;
+$this->db->from('test');				
+		$this->db->where(array("key"=>"testOk"));//change		
+		$count = $this->db->get()->num_rows();
+
+echo "<h1>Se han realizado $count ventas</h1>";?>
+                       
+ */ ?>
+
+<center>
+    <h3>Test for free!!!</h3>
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 ><TR><TD><TABLE Border=1 CellPadding=3 CellSpacing=1 style='text-align:center'>  <TR>	<TD>
+<?php echo $this->lang->line("adquire_modules_modules"); ?></TD><TD><?php echo $this->lang->line("adquire_modules_monthly"); ?></TD><TD><?php echo $this->lang->line("adquire_modules_semiannual"); ?></TD><TD><?php echo $this->lang->line("adquire_modules_annual"); ?></TD></TR>
+	<?php	
+		$this->load->helper('dinero_mail');                 
+		echo beginModuleRow($langEnd,'order');
+                echo "<TD ALIGN='Left'><span>$ 0.00 free</span>";
+                echo MYpagomasterSimulateCallBack("111".$enterprise_id,"Test me!!!");
+                echo "</TD> <TD ALIGN='Left'><span>$ 0.00 free</span>";
+                echo MYpagomasterSimulateCallBack("112".$enterprise_id,"Test me!!!");
+                echo "</TD> <TD ALIGN='Left'><span>$ 0.00 free</span>";
+                echo MYpagomasterSimulateCallBack("113".$enterprise_id,"Test me!!!");	
+                 echo "</TD>";
+		echo endModuleRow();
+		
+		echo beginModuleRow($langEnd,'delivery');
+                echo "<TD ALIGN='Left'><span>$ 0.00 free</span>";
+	        echo MYpagomasterSimulateCallBack("121".$enterprise_id,"Test me!!!");
+                echo "</TD> <TD ALIGN='Left'><span>$ 0.00 free</span>";
+                echo MYpagomasterSimulateCallBack("122".$enterprise_id,"Test me!!!");
+                echo "</TD> <TD ALIGN='Left'><span>$ 0.00 free</span>";
+                echo MYpagomasterSimulateCallBack("123".$enterprise_id,"Test me!!!");
+                echo "</TD>";
+		echo endModuleRow();
+		
+		echo beginModuleRow($langEnd,'report');	
+                echo "</TD> <TD ALIGN='Left'><span>$ 0.00 free</span>";
+                echo MYpagomasterSimulateCallBack("131".$enterprise_id,"Test me!!!");
+                echo "</TD> <TD ALIGN='Left'><span>$ 0.00 free</span>";
+                echo MYpagomasterSimulateCallBack("132".$enterprise_id,"Test me!!!");
+                echo "</TD> <TD ALIGN='Left'><span>$ 0.00 free</span>";                
+                echo MYpagomasterSimulateCallBack("133".$enterprise_id,"Test me!!!");	              
+                echo "</TD>";
+                echo endModuleRow();
+	
+	?>		
+	</TABLE>
+
+		</TD></TR>
+		<TR><TD ALIGN="center">
+
+
+
+<?php
+echo MYpagomasterSimulateCallBack("201".$person_id,"Offer 1 Simulate Callback of Banner at bottom of the page x 1,000 Prints (no login page)");
+echo MYpagomasterSimulateCallBack("202".$person_id,"Offer 2 Simulate Callback of Banner at bottom of the page x 30,000 Prints (no login page)");
+echo MYpagomasterSimulateCallBack("203".$person_id,"Offer 3 Simulate Callback of Banner at bottom of the page x 70,000 Prints (no login page)");
+echo MYpagomasterSimulateCallBack("204".$person_id,"Offer 4 Simulate Callback of Banner at side of the page x 1,000 Prints (no login page)");
+echo MYpagomasterSimulateCallBack("205".$person_id,"Offer 5 Simulate Callback of Banner at side of the page x 30,000 Prints (no login page)");
+echo MYpagomasterSimulateCallBack("206".$person_id,"Offer 6 Simulate Callback of Banner at side of the page x 70,000 Prints (no login page)");
+echo MYpagomasterSimulateCallBack("207".$person_id,"Offer 7 Simulate Callback of Banner at login of the page x 1,000 Prints");
+echo MYpagomasterSimulateCallBack("208".$person_id,"Offer 8 Simulate Callback of Banner at login of the page x 30,000 Prints");
+echo MYpagomasterSimulateCallBack("209".$person_id,"Offer 9 Simulate Callback of Banner at login of the page x 70,000 Prints");
+
+$this->load->view("partial/footer"); ?>
+

@@ -1,0 +1,170 @@
+<?php
+require_once ("secure_area.php");
+class Subsidaries extends Secure_area
+{
+	function __construct()
+	{
+		parent::__construct('subsidaries');
+                //force_ssl();
+	}
+	
+	function index($success_msg = 0, $success = 1)
+	{
+      
+            $this->session->set_userdata('subsidary_id',$this->session->userdata('subsidary_id'));
+
+            $data['controller_name']= strtolower($this->uri->segment(1));
+            $data['form_width']= $this->get_form_width();
+            $data['manage_table'] = get_subsidaries_manage_table($this->Subsidary->get_all(),$this);
+            $data['margin'] = $this->margin_footer();
+            $data['success_msg'] = $success_msg;
+            $data['success'] = $success;
+            $this->load->view('subsidaries/manage', $data);
+	}
+
+	function get_form_width()
+	{
+		return 360;
+	}
+	
+        function margin_footer()
+        {		
+                $banners = $this->session->userdata('real_banners_showed');
+                $rows = (($banners%2)==0)?($banners/2):($banners/2)+1;
+                $margin = ($rows == 0)?(1 * $this->config->item('banner_side_height')):($rows * $this->config->item('banner_side_height'));
+                return ($margin + 10);
+        }
+    
+	function get_row()
+	{
+		$subsidary_id = $this->input->post('row_id');
+		$data_row = get_subsidary_data_row($this->Subsidary->get_info($subsidary_id),$this);
+		echo $data_row;
+	}
+	
+	/*
+	Loads the subsidary edit form
+	*/
+	function view($subsidary_id=-1)
+	{
+        //$data['actual_date'] = date('Y-m-d');//HL 2013-07-27
+		$data['subsidary_info'] = $this->Subsidary->get_info($subsidary_id);	
+		$this->load->view("subsidaries/form",$data);
+	}
+	
+	function save_config($subsidary_id=-1)
+	{
+            if($this->input->post('submited') == 'yes')
+            {
+                $data = array(
+                    'company'=>$this->input->post('company'),
+                    'country'=>$this->input->post('country'),
+                    'address'=>$this->input->post('address'),
+                    'phone'=>$this->input->post('phone'),
+                    'email'=>$this->input->post('email'),
+                    'zip'=>$this->input->post('zip'),
+                    'fax'=>$this->input->post('fax'),
+                    'website'=>$this->input->post('website'),
+                    'default_tax_1_rate'=>$this->input->post('default_tax_1_rate'),		
+                    //'default_tax_1_name'=>$this->input->post('default_tax_1_name'),		
+                    'default_tax_2_rate'=>$this->input->post('default_tax_2_rate'),	
+                    //'default_tax_2_name'=>$this->input->post('default_tax_2_name'),		
+                    'return_policy'=>$this->input->post('return_policy'),
+                    'language'=>$this->input->post('language'),
+                    'timezone'=>$this->input->post('timezone'),
+                    'print_after_sale'=> 1 ,//$this->input->post('print_after_sale'),
+                    'currency_id'=>$this->input->post('currency'),
+                    'order_and_finishSale'=>$this->input->post('order_and_finishSale'),                    
+                    'delivery_and_finishSale'=>$this->input->post('delivery_and_finishSale'),
+                    'closing_cycle'=>$this->input->post('closing_cycle')//ojo para update
+                );	
+
+
+                $success_save = $this->Subsidary->save($data,$subsidary_id);
+                if($success_save)
+                    $this->Item->update_taxes($subsidary_id);
+                
+                $this->lang->switch_to($data['language']);//arreglar
+
+                $success = 0;
+                if($subsidary_id == -1 && $success_save)
+                {
+                    $success_msg = $this->lang->line('subsidaries_successful_adding');
+                    $success = 1;
+                }
+                else if($subsidary_id != -1 && $success_save)
+                {
+                    $success_msg = $this->lang->line('subsidaries_successful_updating');
+                    $success = 1;
+                }
+                else if($subsidary_id == -1 && !$success_save) 
+                   $success_msg = $this->lang->line('subsidaries_error_adding_updating');
+                else if($subsidary_id != -1 && !$success_save)
+                    $success_msg = $this->lang->line('subsidaries_error_adding_updating');
+
+                $success_msg.= ' '.$data['company'];
+
+                $this->index($success_msg, $success);
+            }
+            else
+               $this->index();
+	}
+	
+	/*
+	This deletes subsidaries from the subsidaries table
+	*/
+	function delete()
+	{
+		$subsidaries_to_delete = $this->input->post('ids');
+	
+		if($this->Subsidary->delete_list($subsidaries_to_delete))
+		{
+			echo json_encode(array('success'=>true,'message'=>$this->lang->line('subsidaries_successful_deleted').' '.
+			count($subsidaries_to_delete).' '.$this->lang->line('subsidaries_one_or_multiple')));
+		}
+		else
+		{
+			echo json_encode(array('success'=>false,'message'=>$this->lang->line('subsidaries_cannot_be_deleted')));
+		}
+	}
+	
+	function deactivate($subsidary_id)
+	{
+		$this->Subsidary->delete($subsidary_id);
+	}
+	
+	function select($subsidary_id)
+	{
+		$this->Subsidary->setSubsidary($subsidary_id);
+		$this->index();	
+	}
+	
+	function delete_subsidary($subsidary_id)
+	{
+		$this->Subsidary->delete($subsidary_id);
+		$this->index();	
+	}
+	
+	function UNdelete_subsidary($subsidary_id)
+	{
+		$this->Subsidary->UNdelete($subsidary_id);
+		$this->index();
+	}
+
+    /*HL (2013-07-30)*/
+    function check_new_date()
+    {
+        $sec_in_a_day = 86400; // 24*60*60
+
+        $closing_cycle = $this->input->post("closing_cycle");
+
+        $time = $closing_cycle * 30;
+
+        $day = date('d-m-Y', date('U') + $time * $sec_in_a_day);
+
+        echo $day;
+    }
+        
+}
+	
+?>

@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<base href="<?php echo base_url();?>" />
+	<title><?php echo $this->config->item('company').' -- '.$this->lang->line('common_powered_by').' '.$this->lang->line('sales_system'); ?></title>
+	
+<link rel="shortcut icon" href="images/icos/iandresa.ico" type="image/x-icon" />	
+	
+	<link rel="stylesheet" rev="stylesheet" href="<?php echo base_url();?>css/phppos.css" />
+	<link rel="stylesheet" rev="stylesheet" href="<?php echo base_url();?>css/phppos_print.css"  media="print"/>
+	<link rel="stylesheet" rev="stylesheet" href="<?php echo base_url();?>css/SpryCollapsiblePanel.css" />
+	<script src="<?php echo base_url();?>js/jquery-1.2.6.min.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+	<script src="<?php echo base_url();?>js/jquery.color.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+	<script src="<?php echo base_url();?>js/jquery.metadata.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+	<script src="<?php echo base_url();?>js/jquery.form.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+	<script src="<?php echo base_url();?>js/jquery.tablesorter.min.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+	<script src="<?php echo base_url();?>js/jquery.ajax_queue.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+	<script src="<?php echo base_url();?>js/jquery.bgiframe.min.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+	<script src="<?php echo base_url();?>js/jquery.autocomplete.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+	<script src="<?php echo base_url();?>js/jquery.validate.min.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+	<script src="<?php echo base_url();?>js/thickbox.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+	<script src="<?php echo base_url();?>js/common.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+	<script src="<?php echo base_url();?>js/manage_tables.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+	<script src="<?php echo base_url();?>js/swfobject.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+	<script src="<?php echo base_url();?>js/SpryCollapsiblePanel.js" type="text/javascript" language="javascript" charset="UTF-8"></script>
+<style type="text/css">
+html {
+    overflow: auto;
+}
+</style>
+<script language="javascript" type="text/javascript">
+    //<![CDATA[
+    var cot_loc0=(window.location.protocol == "https:")? "https://secure.comodo.net/trustlogo/javascript/cot.js" :
+    "http://www.trustlogo.com/trustlogo/javascript/cot.js";
+    document.writeln('<scr' + 'ipt language="JavaScript" src="'+cot_loc0+'" type="text\/javascript">' + '<\/scr' + 'ipt>');
+    //]]>
+</script>
+</head>
+<body >
+<div id="menubar">
+    
+      <?php
+            $lang = $this->session->userdata('lang');
+        ?>
+
+       
+           
+       
+    
+	<div id="menubar_container">
+         <div id="bola" style="margin-top: 30px; float: left">
+         <a href="<?php echo site_url('login/show_menu/'.$lang.'/Services');?>" 
+               title="<?php echo $this->lang->line('login_Services'); ?>">
+            <img width="50px" src="images/logotipo/<?php echo $this->lang->line('login_out'); ?>.png" 
+                 onmouseover="this.src='images/logotipo/<?php echo $this->lang->line('login_over'); ?>.png'" 
+                 onmouseout="this.src='images/logotipo/<?php echo $this->lang->line('login_out'); ?>.png'" 
+                 border="0">;
+        </a>
+         </div>
+        <div id="menubar_company_info" style="margin-left: 60px">
+		<!--<span id="company_title"><?php echo $this->config->item('company'); ?></span><br />-->
+		<span id="company_title"><?php echo $this->Enterprise->getName($this->session->userdata('enterprise_id')); ?></span><br />
+		<span id="company_title"><?php echo $this->Subsidary->getName($this->session->userdata('subsidary_id')); ?></span><br />
+		<span style='font-size:8pt;'><?php echo $this->lang->line('common_powered_by').' '.$this->lang->line('sales_system'); ?></span>
+	</div>
+
+		<div id="menubar_navigation">
+			<?php
+			foreach($allowed_modules->result() as $module)
+			{
+			?>
+			<div class="menu_item">
+				<a href="<?php echo site_url("$module->module_id");?>">
+				<img src="<?php echo base_url().'images/menubar/'.$module->module_id.'.png';?>" border="0" alt="Menubar Image" /></a><br />
+				<a href="<?php echo site_url("$module->module_id");?>"><?php echo $this->lang->line("module_".$module->module_id) ?></a>
+			</div>
+			<?php
+			}
+			?>
+		</div>
+
+		<div id="menubar_footer">
+		<?php echo $this->lang->line('common_welcome')." $user_info->first_name $user_info->last_name! | "; ?>
+		<?php echo anchor("home/logout",$this->lang->line("common_logout")); ?>
+		</div>
+
+		<div id="menubar_date">
+		<?php echo date('F d, Y h:i a') ?>
+		</div>
+
+	</div>
+</div>
+    <div id="content_area_wrapper">
+        
+        <center>
+            <?php
+
+                $adds = $this->Campaign_model->get_nextadvises('side');
+
+                $this->session->set_userdata('real_banners_showed', count($adds));
+                
+                $ban_margintop = 100;
+                $dis_from_center = 523;
+                
+                echo "<div style='height:0px; width: ".$this->config->item('banner_side_width')."px;position:relative;right: ".$dis_from_center."px;margin-bottom: -100px;margin-top: 100px'>";
+                for($i = 0 ; $i < count($adds)/2; $i++)
+                {
+                    echo "<a href='".site_url().'/bannerclick/click/'.$adds[$i]['campaign_id']."' target='_blank' title='{$adds[$i]['tooltip']}'>";
+                    echo "<img border='0' alt='banner' height='".$this->config->item('banner_side_height')."' width='".$this->config->item('banner_side_width')."' src='".base_url()."images/banners_pics/".$adds[$i]['image_large']."'/>";
+                    echo "</a>";
+                }
+                echo "</div>";
+                
+                
+                echo "<div style='height:0px; width: ".$this->config->item('banner_side_width')."px;position:relative;left: ".$dis_from_center."px;margin-bottom: -100px;margin-top: 100px'>";
+                for($i = count($adds)%2 == 0 ? count($adds)/2 : count($adds)/2 + .5 ; $i < count($adds); $i++)
+                {
+                    echo "<a href='".site_url().'/bannerclick/click/'.$adds[$i]['campaign_id']."' target='_blank' title='{$adds[$i]['tooltip']}'>";
+                    echo "<img border='0' alt='banner' height='".$this->config->item('banner_side_height')."' width='".$this->config->item('banner_side_width')."' src='".base_url()."images/banners_pics/".$adds[$i]['image_large']."'/>";
+                    echo "</a>";
+                }
+                echo "</div>";
+                
+            ?>
+        
+        
+           
+
+            
+        <center> 
+        
+            
+            
+            
+            
+            <div id="content_area">

@@ -1,0 +1,125 @@
+#newData
+{
+	display:block;
+	width:100%;
+	float:left;	
+}
+
+#fieldDesc
+{
+	display:inline;
+	width:20%;
+	float:left;
+}
+
+#fieldData
+{
+	display:inline;
+	width:80%;
+	float:left;
+}
+
+#cantList
+{
+	display:inline;
+	width:10%;
+	float:left;
+}
+
+#prodList
+{
+	display:inline;
+	width:70%;
+	float:left;
+}
+
+#valueList
+{
+	display:inline;
+	width:20%;
+	float:left;
+}
+
+#provList
+{
+	display:inline;
+	width:15%;
+	float:left;
+}
+
+#dates
+{
+	display:inline;
+	width:70%;
+	float:left;
+}
+
+#estadoList
+{
+	display:inline;
+	width:10%;
+	float:left;
+}
+
+#nameList
+{
+	display:inline;
+	width:45%;
+	float:left;
+}
+
+#descList
+{
+	display:inline;
+	width:45%;
+	float:left;
+}
+
+#label1
+{
+	display:inline;
+	width:20%;
+	float:left;
+}
+
+#label2
+{
+	display:inline;
+	width:80%;
+	float:left;
+}
+
+#labelBol
+{
+	display:inline;
+	width:20%;
+	float:left;
+}
+
+#dataBol
+{
+	display:inline;
+	width:80%;
+	float:left;
+}
+
+#label3
+{
+	display: inline;
+	width:10%;
+	float:left;
+}
+
+#label4
+{
+	display:inline;
+	float:left;
+	width:75%;
+}
+
+#label5
+{
+	display:inline;
+	float:left;
+	width:15%;
+}

@@ -1,0 +1,401 @@
+<?php
+class Register extends Controller 
+{
+	function __construct()
+	{
+		parent::__construct();
+                //force_ssl();
+	}
+	
+	function index($lang='english')//BADCODE la 'e'
+	{ 
+	           
+                $this->session->set_userdata('login', 'registerEnterprise');
+		
+                if($lang != 'spanish')$lang='english';	 
+		$this->lang->switch_to($lang);//BADCODE
+		
+		$data = array(
+                'boss'=>$this->input->post('boss'),
+		'user'=>$this->input->post('username'),
+		'password'=>md5($this->input->post('password')),
+                'password2'=>md5($this->input->post('password2')),
+		'enterprise'=>$this->input->post('enterprise'),
+		'subsidary'=>$this->input->post('subsidary'),
+                'email'=>$this->input->post('email'),
+                'secret_question'=>$this->input->post('secret_question'),
+                'secret_answer'=>$this->input->post('secret_answer'),			
+				
+		        'phone_number' => $this->input->post('phone_number'),
+                        'zip' => $this->input->post('zip'),
+		        'address_1' => $this->input->post('address_1'),		       
+		        'country' => $this->input->post('country'),		        
+				'language'=>$this->input->post('language')//$lang
+		
+		); 
+
+		$register = array(
+               array(
+                     'field'   => 'boss', 
+                     'label'   => $this->lang->line('register_username'), 
+                     'rules'   => 'required'
+                  ),
+               array(
+                     'field'   => 'username', 
+                     'label'   => $this->lang->line('login_username'), 
+                     'rules'   => 'required|min_length[5]'
+                  ),
+               array(
+                     'field'   => 'password', 
+                     'label'   => $this->lang->line('register_password'), 
+                     'rules'   => 'required|min_length[8]'
+                  ),
+               array(
+                     'field'   => 'password2', 
+                     'label'   => $this->lang->line('register_repeat_password'), 
+                     'rules'   => 'required|min_length[8]|matches[password]'
+                  ),
+               array(
+                     'field'   => 'enterprise', 
+                     'label'   => $this->lang->line('register_enterprise'), 
+                     'rules'   => 'required'
+                  ),   
+               array(
+                     'field'   => 'subsidary', 
+                     'label'   => $this->lang->line('register_branch'), 
+                     'rules'   => 'required'
+                  ),
+               array(
+                     'field'   => 'email',
+                     'label'   => $this->lang->line('register_email'),
+                     'rules'   => 'required|valid_email|matches[email2]'
+                  ),
+               array(
+                     'field'   => 'email2',
+                     'label'   => $this->lang->line('register_email2'),
+                     'rules'   => 'required|valid_email'
+                  )
+                    ,   
+               array(
+                     'field'   => 'secret_answer', 
+                     'label'   => $this->lang->line('employees_secret_answer'), 
+                     'rules'   => 'required'
+                  ),   
+               array(
+                     'field'   => 'secret_question', 
+                     'label'   => $this->lang->line('employees_secret_question'), 
+                     'rules'   => 'required'
+                  ),
+			   array(
+                     'field'   => 'phone_number', 
+                     'label'   => $this->lang->line('common_phone_number'), 
+                     'rules'   => 'required|numeric'
+                  ),
+                  	   array(
+                     'field'   => 'zip', 
+                     'label'   => $this->lang->line('common_zip'), 
+                     'rules'   => 'required|numeric'
+                  ),
+			   array(
+                     'field'   => 'address_1', 
+                     'label'   => '', 
+                     'rules'   => ''
+                  ),
+			   array(
+                     'field'   => 'country', 
+                     'label'   => '', 
+                     'rules'   => ''
+                  )
+                   
+            );
+
+		$this->form_validation->set_rules($register);
+		$this->form_validation->set_rules('terms', 'terms', 'callback_terms_check' );
+                $this->form_validation->set_rules('username','lang:register_undername', 'callback_register_check');
+                //$this->form_validation->set_error_delimiters('<div class="error2">', '</div>');
+				//$this->form_validation->error('', '<li>', '</li>');
+				$this->form_validation->set_error_delimiters('<li>', '</li>');
+			
+		if($this->form_validation->run() == FALSE)
+		{
+			$this->load->view('register',array('lang'=>$lang));
+			
+		}
+		else
+		{
+			$this->Employee->saveRegister($data);
+                        
+                        $stdletter_id_name = 'enterprise_created';
+                        $client_name = $this->input->post('boss');
+                        $email = $data['email'];
+                        $language = $this->input->post('language');
+                        $this->tasklib->Sent_Letter_To_Person($stdletter_id_name, $email, $language, $client_name,NULL,NULL,NULL,NULL,NULL);
+			
+                        redirect('home');
+		}
+	}
+        
+        function selectLanguage()
+	{         
+                $lang = $this->input->post('language');
+                echo $lang;
+		if($lang != 'spanish')$lang='english';	 
+		$this->lang->switch_to($lang);//BADCODE
+		
+		/*$data = array(
+                'boss'=>$this->input->post('boss'),
+		'user'=>$this->input->post('username'),
+		'password'=>md5($this->input->post('password')),
+		'enterprise'=>$this->input->post('enterprise'),
+		'subsidary'=>$this->input->post('subsidary'),
+                'email'=>$this->input->post('email'),
+                'secret_question'=>$this->input->post('secret_question'),
+                'secret_answer'=>$this->input->post('secret_answer'),
+		'language'=>$this->input->post('language')//$lang
+		);*/ 	
+		
+                $this->load->view('register',array('lang'=>$lang));
+	}
+        
+	function terms_check($str)
+	{	
+		if ($str == false)
+		{
+			$this->form_validation->set_message('terms_check',$this->lang->line('register_adviser_mustacceptterms'));			
+			return FALSE;
+		}
+		return TRUE;	
+	}
+        
+	function register_check($username)
+	{
+	    $user = $this->input->post('username');
+            /*$pass = $this->input->post('password');
+            $enterprise = $this->input->post('enterprise');*/
+
+            if($user == "")
+            {
+                $this->form_validation->set_message('register_check', $this->lang->line('register_user_required'));
+                return false;
+            }
+            else if($this->Employee->validate_user($user))
+            {
+                $this->form_validation->set_message('register_check', $this->lang->line('register_unsuccessfully'));
+                return false;
+            }
+           
+            return true;			
+	}
+    
+     function newadviser($lang='english')
+    {
+         $this->session->set_userdata('login', 'registerAdviser');
+		if($lang != 'spanish')$lang='english';	
+		$this->lang->switch_to($lang);	
+		  //Esto obtiene un objeto persona vacio.
+        $person_info = $this->Employee->get_info(-1);
+        $data['person_info'] = $person_info;
+        $data['creating_adviser'] = true;
+  
+        $data['lang']=$lang;
+        
+
+        $this->form_validation->set_rules('username','lang:register_undername', 'callback_new_adviser_check');
+    	//$this->form_validation->set_error_delimiters('<li>', '</li>');
+       // <label for="name" generated="true" class="error" style="display: inline; ">Nombre es un campo requerido</label>
+			
+        
+        if($this->form_validation->run() == false)
+        {
+                $person_info->first_name = $this->input->post('first_name');
+                $person_info->last_name = $this->input->post('last_name');
+                if($this->input->post('email') ==  $this->input->post('repeat_email'))
+                    $person_info->email = $this->input->post('email');
+                
+                $person_info->phone_number = $this->input->post('phone_number');
+                $person_info->address_1 = $this->input->post('address_1');
+                $person_info->address_2 = $this->input->post('address_2');
+                $person_info->city = $this->input->post('city');
+                $person_info->state = $this->input->post('state');
+                $person_info->zip = $this->input->post('zip');
+                $person_info->country = $this->input->post('country');
+                $person_info->comments = $this->input->post('comments');
+         $data['secret_question']=$this->input->post('secret_question');
+         $data['secret_answer']=$this->input->post('secret_answer');
+            $this->load->view("registeradviser", $data);
+        }
+        else
+        {
+            $person_data = array
+            (
+                'first_name'=>$this->input->post('first_name'),
+                'last_name'=>$this->input->post('last_name'),
+                'email'=>$this->input->post('email'),
+                'phone_number'=>$this->input->post('phone_number'),
+                'address_1'=>$this->input->post('address_1'),
+                'address_2'=>$this->input->post('address_2'),
+                'city'=>$this->input->post('city'),
+                'state'=>$this->input->post('state'),
+                'zip'=>$this->input->post('zip'),
+                'country'=>$this->input->post('country'),
+                'comments'=>$this->input->post('comments')
+//                'subsidary_id'=>'',
+//                'enterprise_id'=>'',
+            );
+            $employee_data = array(
+                 'username'=>$this->input->post('username'),
+                 'password'=>md5($this->input->post('password')),
+                 'secret_question'=>$this->input->post('secret_question'),
+                 'secret_answer'=>$this->input->post('secret_answer')      
+            );
+            
+            $lang = $this->input->post('language');
+            
+            $this->db->trans_start();
+            $this->db->insert('people', $person_data);
+            $insert_id = $this->db->insert_id();
+            $employee_data['person_id'] = $insert_id;
+            $this->db->insert('employees', $employee_data);
+            
+//Ariel: Esto no se hace hasta que el SUDO lo acepte
+            //$this->db->insert('permissions',array('module_id'=>'campaign', 'person_id'=>$employee_data['person_id']));
+            
+            //Ariel: Como los advisers NO pertenecen a ninguna subsidiaria, se insrta el idioma en esta nueva tabla
+            $lang = $this->input->post('language');
+            $this->db->insert('adviser_lang', array('person_id'=> $insert_id, 'language'=>$lang));
+            
+            $this->db->trans_complete();
+            
+
+            $this->form_validation->set_message("Adviser inserted. Please login.");
+
+            
+            //Mandar correo al sudo
+//            $sudos = $this->Employee->get_super_user();
+//            $this->load->library('email');
+//            
+//            foreach($sudos->result() as $s)
+//            {
+//                $this->email->from($this->config->item('from_address'));
+//                $this->email->to($s->email);
+//                $this->email->subject($this->lang->line('adviser_newregisterd_email_suject'));
+//                $this->email->message($this->lang->line('adviser_newregisterd_email_body'));	
+//                $this->email->send();
+//                //echo $this->email->print_debugger();
+//            }
+           
+            
+            $this->Adviser->change_accepted_adviser($employee_data['person_id'], 1);
+            
+            $this->session->set_userdata('person_id', $employee_data['person_id']);
+            
+            redirect('home');
+
+        }
+    }
+
+    
+    function new_adviser_check()
+    {
+        $accept = $this->input->post('accept');
+        $user = $this->input->post('username');
+        $pass = $this->input->post('password');
+        $pass2 = $this->input->post('password2');
+        $first_name = $this->input->post('first_name');
+        $last_name = $this->input->post('last_name');
+        $email = $this->input->post('email');
+        $email2 = $this->input->post('repeat_email');
+        $phone_number= $this->input->post('phone_number');
+        $question = $this->input->post('secret_question');
+        $answer = $this->input->post('secret_answer');
+        $zip = $this->input->post('zip');
+
+      
+        $message = array();
+        
+        // username
+        if($user == "")
+        {
+            $message[] = $this->lang->line('employees_username_required');
+        }
+        else if(strlen($user) < 5)
+        {
+            $message[] = $this->lang->line('employees_username_minlength');
+        }
+        else if($this->Employee->validate_user($user))
+        {   
+            $message[] = $this->lang->line('employees_username_unavaible');
+        }
+        // password
+        if($pass == "" && $pass2 == "")
+        {
+            $message[] = $this->lang->line('employees_password_required');
+        }
+        else if($pass != $pass2)
+        {
+            $message[] = $this->lang->line('employees_password_must_match');
+        }
+        else if(strlen($pass) < 8)
+        {
+             $message[] = $this->lang->line('employees_password_minlength');
+        }
+        // First name
+        if($first_name == "")
+        {
+            $message[] = $this->lang->line('common_first_name_required');
+        }
+        // Last name
+        if($last_name == "")
+        {
+            $message[] = $this->lang->line('common_last_name_required');
+        } 
+        // Em@il
+        if($email == "" && $email2 == "")
+        {
+            $message[] = $this->lang->line('common_email_required');
+        }
+        else if($email != $email2)
+        {
+            $message[] = $this->lang->line('common_email_notmatch');
+        }
+        //
+        //$question
+        if($question == "")
+        {
+            $message[] = $this->lang->line('common_question');
+        }
+        //$answer
+        if($answer == "")
+        {
+            $message[] = $this->lang->line('common_answer');
+        }
+        //Terms
+        if($accept == 'no')
+        {
+            $message[] = $this->lang->line('register_adviser_mustacceptterms');
+        }       
+        //phone number
+	if(!$this->form_validation->numeric($phone_number))
+	{
+            $message[] = $this->lang->line('register_phone_required');;
+        }
+        if(!$this->form_validation->numeric($zip))
+        {
+            $message[] = $this->lang->line('register_zip_required');
+        }
+        
+        $all_errors = "";
+        foreach($message as $msg)
+            $all_errors .= "<li>$msg</li>";
+            
+        $this->form_validation->set_message('new_adviser_check', $all_errors);
+        
+        return count($message) == 0;		
+    }
+    
+    function termsofuse()
+    {
+        $this->load->view('termsofuse');
+    }
+}
+?>

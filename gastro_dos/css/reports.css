@@ -1,0 +1,53 @@
+#report_list li ul li
+{
+	margin-left: 35px;
+}
+#report_list
+{
+        margin-left: 20px; 
+        margin-right: 20px;
+}
+#underline
+{
+    text-decoration: underline;
+}
+#report_date_range_simple
+{
+	margin-bottom: 3px;
+}
+.report 
+{
+	font-size: .85em;
+}
+#report_summary
+{
+	margin: 0 auto;
+	text-align: center;
+}
+
+#report_summary .summary_row
+{
+        
+}
+
+#report_summary1
+{
+	margin-top: 20px;
+	text-align: center;
+}
+
+#print_details
+{
+	margin-top: 10px; 
+        text-align: center;
+}
+
+#report_summary1 .summary_row1
+{
+    margin-top: 10px;
+}
+
+#chart_wrapper
+{
+	text-align: center;
+}

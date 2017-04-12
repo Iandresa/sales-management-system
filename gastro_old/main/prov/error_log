@@ -1,0 +1,15 @@
+[16-Dec-2010 16:57:41] PHP Parse error:  syntax error, unexpected '<' in /home/iandr3/public_html/Gastro/main/prov/index.php on line 205
+[16-Dec-2010 16:59:33] PHP Parse error:  syntax error, unexpected '<' in /home/iandr3/public_html/Gastro/main/prov/index.php on line 205
+[16-Dec-2010 16:59:35] PHP Parse error:  syntax error, unexpected '<' in /home/iandr3/public_html/Gastro/main/prov/index.php on line 205
+[16-Dec-2010 17:00:19] PHP Parse error:  syntax error, unexpected '}' in /home/iandr3/public_html/Gastro/main/prov/index.php on line 216
+[16-Dec-2010 17:00:53] PHP Fatal error:  Class 'encargo' not found in /home/iandr3/public_html/Gastro/main/prov/index.php on line 186
+[16-Dec-2010 17:01:32] PHP Fatal error:  Call to a member function searchActivos() on a non-object in /home/iandr3/public_html/Gastro/main/prov/index.php on line 187
+[16-Dec-2010 17:02:06] PHP Warning:  mysql_num_fields(): supplied argument is not a valid MySQL result resource in /home/iandr3/public_html/Gastro/main/prov/db/mysql.php on line 89
+[16-Dec-2010 17:02:06] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/iandr3/public_html/Gastro/main/prov/db/mysql.php on line 91
+[16-Dec-2010 17:02:06] PHP Fatal error:  Cannot use object of type recinto as array in /home/iandr3/public_html/Gastro/main/prov/index.php on line 194
+[16-Dec-2010 17:03:02] PHP Warning:  mysql_num_fields(): supplied argument is not a valid MySQL result resource in /home/iandr3/public_html/Gastro/main/prov/db/mysql.php on line 89
+[16-Dec-2010 17:03:02] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /home/iandr3/public_html/Gastro/main/prov/db/mysql.php on line 91
+[16-Dec-2010 17:03:02] PHP Fatal error:  Cannot use object of type recinto as array in /home/iandr3/public_html/Gastro/main/prov/index.php on line 196
+[16-Dec-2010 17:05:39] PHP Fatal error:  Cannot use object of type recinto as array in /home/iandr3/public_html/Gastro/main/prov/index.php on line 194
+[16-Dec-2010 17:06:53] PHP Fatal error:  Cannot use object of type recinto as array in /home/iandr3/public_html/Gastro/main/prov/index.php on line 196
+[16-Dec-2010 17:19:01] PHP Fatal error:  Call to undefined method proveedor::getDataProveedor() in /home/iandr3/public_html/Gastro/main/prov/index.php on line 129

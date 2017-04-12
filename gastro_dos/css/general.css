@@ -1,0 +1,296 @@
+.field_row 
+{
+	margin: 0 0 10px 0;
+}
+
+.field_row label 
+{
+	float:left;
+	width:100px;
+	text-align:left;
+	line-height:2.3;
+}
+
+.field_row label.wide 
+{
+	width:150px;
+}
+
+.field_row label.wide2 
+{
+	width:150px;
+	text-align:center;
+}
+
+label.required
+{
+	color:red;
+}
+ 
+.form_field
+{
+ 	float:left;
+ 	padding: 3px;
+ 	background-color: #f2f2f2;
+}
+  
+.form_field input, .form_field textarea 
+{
+ 	border: 1px solid #ccc;
+ 	padding: 4px;
+}
+
+.submit_button 
+{
+	padding: 5px;
+	color: #fff;
+	background-color: #0a6184;
+	border: 2px solid #ddd;
+}
+
+.submit_button2 
+{
+        padding: 5px;
+	color: #fff;
+	background-color: #0a6184;
+	border: 2px solid #ddd;
+        cursor:pointer;
+}
+
+.small_button
+{
+	position:relative;
+	width:95px;
+	height:30px;
+	background-image: url(../images/small_action_button.jpg);
+	background-repeat:no-repeat;
+	cursor:pointer;
+}
+
+.calendar
+{
+    position: relative;
+    width:16px;
+    height:15px;
+    background-image: url(../images/calendar.gif);
+    background-repeat:no-repeat;
+    cursor:pointer;
+}
+
+.small_button2
+{
+	position:relative;
+	width:120px;
+	height:30px;
+	background-image: url(../images/small_action_button2.jpg);
+	background-repeat:no-repeat;
+	cursor:pointer;
+}
+
+.small_button3
+{
+    position:relative;
+    width:110px;
+    height:20px;
+    background-image: url(../images/small_action_button3.jpg);
+    background-repeat:no-repeat;
+    cursor:pointer;
+}
+
+.small_button span
+{
+	position:absolute;
+	width:100%;
+	top:30%;
+	left:0%;
+	color:#FFF;
+	font-size:10px;
+	font-weight:bold;
+	text-align:center;
+}
+
+.small_button2 span
+{
+	position:absolute;
+	width:100%;
+	top:30%;
+	left:0%;
+	color:#FFF;
+	font-size:10px;
+	font-weight:bold;
+	text-align:center;
+}
+
+.small_button3 span
+{
+    position:absolute;
+    width:100%;
+    top:20%;
+    left:0%;
+    color:#FFF;
+    font-size:10px;
+    font-weight:bold;
+    text-align:center;
+}
+
+.sb
+{
+	margin: 0 auto;
+	position:relative;
+	width:95px;
+	height:30px;
+	background-image: url(../images/small_action_button.jpg);
+	background-repeat:no-repeat;
+	cursor:pointer;
+}
+.sb span
+{
+	position:absolute;
+	width:100%;
+	top:30%;
+	left:0%;
+	color:#FFF;
+	font-size:9px;
+	font-weight:none;
+	text-align:center;
+	font-family: verdana;
+}
+
+.sb1
+{
+	margin: 0 auto;
+	position:relative;
+	width:95px;
+	height:30px;
+	background-image: url(../images/small_action_button.jpg);
+	background-repeat:no-repeat;
+	cursor:pointer;
+}
+.sb1 span
+{
+	position:absolute;
+	width:100%;
+	top:30%;
+	left:0%;
+	color:#FFF;
+	font-size:9px;
+	font-weight:none;
+	text-align:center;
+	font-family: verdana;
+}
+
+.float_left
+{
+	float:left;
+}
+
+.float_right
+{
+	float:right;
+}
+
+.help
+{
+	position:relative;
+	width:60px;
+	height:45px;
+	/*background-image: url(../images/help.jpg);
+	background-image: url(../images/spinner_small.gif);*/
+	background-image: url(../images/help.gif);
+	background-repeat:no-repeat;
+	cursor:pointer;
+}
+
+.big_button
+{
+	position:relative;
+	width:119px;
+	height:45px;
+	background-image: url(../images/big_action_button.jpg);
+	background-repeat:no-repeat;
+	cursor:pointer;
+}
+
+.big_button span
+{
+	position:absolute;
+	width:100%;
+	top:35%;
+	color:#FFF;
+	font-size:13px;
+	font-weight:bold;
+	text-align:center;
+}
+
+.big_button2
+{
+	position:relative;
+	width:160px;
+	height:45px;
+	background-image: url(../images/big_action_button2.jpg);
+	background-repeat:no-repeat;
+	cursor:pointer;
+}
+
+.big_button2 span
+{
+	position:absolute;
+	width:100%;
+	top:35%;
+	color:#FFF;
+	font-size:13px;
+	font-weight:bold;
+	text-align:center;
+}
+
+
+.warning_message
+{
+	text-align:center;
+	background-color:#fffcdd;
+	border:1px solid #fff4aa;
+	font-weight:bold;
+}
+
+.error_message
+{
+	text-align:center;
+	background-color:#f68383;
+	border:1px solid #da3232;
+	font-weight:bold;
+}
+
+.warning_mesage
+{
+	text-align:center;
+	background-color:#FBEC5D;
+	border:1px solid #da3232;
+	font-weight:bold;
+}
+
+.success_message
+{
+	text-align:center;
+	background-color:#e1ffdd;
+	border:1px solid #2ca71c;
+	font-weight:bold;
+}
+
+input
+{
+	font-family:arial;
+}
+
+.clearfix:after 
+{
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+
+.clearfix { display: inline-block; }
+html[xmlns] .clearfix {	display: block; }
+* html .clearfix { height: 1%; }

@@ -1,0 +1,3 @@
+ALTER TABLE `phppos_receivings` ADD `mode` VARCHAR( 255 ) NOT NULL DEFAULT 'receive' AFTER `payment_type` ;
+
+Call script('15 H', 'Agrega el campo modo para los receivings.' );

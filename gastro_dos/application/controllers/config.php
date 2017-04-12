@@ -1,0 +1,68 @@
+<?php
+require_once ("secure_area.php");
+class Config extends Secure_area 
+{
+	function __construct()
+	{
+		parent::__construct('config');
+                //force_ssl();
+	}
+	
+	function index($success=0)
+	{
+		$subsidary_id = $this->session->userdata('subsidary_id');
+		$this->session->set_userdata('subsidary_id',$this->session->userdata('subsidary_id'));
+		$data['subsidary_info'] = $this->Appconfig->get_info($subsidary_id);
+		$data['success']=$success;
+		$this->load->view('config',$data);
+	}
+		
+	function save()
+	{
+		$batch_save_data=array(
+		'company'=>$this->input->post('company'),
+		'country'=>$this->input->post('country'),
+		'address'=>$this->input->post('address'),
+		'phone'=>$this->input->post('phone'),
+                'zip'=>$this->input->post('zip'),
+		'email'=>$this->input->post('email'),
+		'fax'=>$this->input->post('fax'),
+		'website'=>$this->input->post('website'),
+		'default_tax_1_rate'=>$this->input->post('default_tax_1_rate'),		
+		//'default_tax_1_name'=>$this->input->post('default_tax_1_name'),		
+		'default_tax_2_rate'=>$this->input->post('default_tax_2_rate'),	
+		//'default_tax_2_name'=>$this->input->post('default_tax_2_name'),		
+		'return_policy'=>$this->input->post('return_policy'),
+		'language'=>$this->input->post('language'),
+		'timezone'=>$this->input->post('timezone'),
+		'print_after_sale'=> 1 ,//$this->input->post('print_after_sale'),
+                'currency_id'=>$this->input->post('currency'),
+                'order_and_finishSale'=>$this->input->post('order_and_finishSale'),
+                'delivery_and_finishSale'=>$this->input->post('delivery_and_finishSale') 
+		);
+		
+		$success_save = $this->Appconfig->batch_save($batch_save_data);
+		
+		$this->lang->switch_to($batch_save_data['language']);
+		//$this->lang->switch_to('spanish');
+		//$this->index();
+		//$this->load->view('home');
+		
+		if($success_save)
+                {
+                    $subsidary_id = $this->session->userdata('subsidary_id');
+                    $this->Item->update_taxes($subsidary_id);
+                }
+                
+		//idimomassssssssssssssss
+                if($success_save)
+		{
+			echo json_encode(array('success'=>true,'message'=>$this->lang->line('config_saved_successfully')));  
+                }
+		else
+		{
+			echo json_encode(array('success'=>false,'message'=>$this->lang->line('config_saved_unsuccessfully')));
+		}
+	}
+}
+?>

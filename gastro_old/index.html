@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+  	<title>Gastro! Gestión de cadenas de restaurants, pubs, bares y discotheques.</title>
+  	<meta name="description" content="Gastro! Gestión de cadenas de restaurants, pubs, bares y discotheques." />
+  	<meta name="keywords" content="restaurants,bares,bar,pub,centro de eventos,chile" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />	
+
+	<!-- stylesheets -->
+  	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+  	<link rel="stylesheet" href="css/slide.css" type="text/css" media="screen" />
+	
+  	<!-- PNG FIX for IE6 -->
+  	<!-- http://24ways.org/2007/supersleight-transparent-png-in-ie6 -->
+	<!--[if lte IE 6]>
+		<script type="text/javascript" src="js/pngfix/supersleight-min.js"></script>
+	<![endif]-->
+	 
+    <!-- jQuery - the core -->
+	<script src="js/jquery-1.3.2.min.js" type="text/javascript"></script>
+	<!-- Sliding effect -->
+	<script src="js/slide.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+<!-- Panel -->
+<div id="toppanel">
+	<div id="panel">
+		<div class="content clearfix">
+			<div class="left">
+				<h1>Gastro Login</h1>
+				<h2>¿Qué es Gastro?</h2>
+				<p class="grey">Gastro es un completo sistema de gestión para cadenas de restaurantes, bares, pubs y centros de eventos. Ve la página inferior para más detalles. Puedes inscribirte en el panel de la derecha.</p>
+			</div>
+			<div class="left">
+				<!-- Login Form -->
+				<form class="clearfix" action="main/login.php" method="post">
+					<h1>Ingreso al Sistema</h1>
+					<label class="grey" for="log">ID:</label>
+					<input class="field" type="text" name="log" id="log" value="" size="23" />
+                                        <label class="grey" for="log"><i>Formato: 12345678 (sin digito verificador)</i></label>
+					<label class="grey" for="pwd">Contraseña:</label>
+					<input class="field" type="password" name="pwd" id="pwd" size="23" />
+	            	<label><input name="rememberme" id="rememberme" type="checkbox" checked="checked" value="forever" /> &nbsp;Recordar</label>
+        			<div class="clear"></div>
+					<input type="submit" name=" Ingresar " value="Login" class="bt_login" />
+					<a class="lost-pwd" href="#">¿Olvidó contraseña?</a>
+				</form>
+			</div>
+			<div class="left right">			
+				<!-- Register Form -->
+				<form action="main/new.php" method="post">
+					<h1>¿Desea registrarse?</h1>
+					<label class="grey" for="signup">ID:</label>
+					<input class="field" type="text" name="signup" id="signup" value="" size="23" />
+					<label class="grey" for="log"><i>Formato: 12345678 (sin digito verificador)</i></label>
+                                        <label class="grey" for="email">Correo Electrónico:</label>
+					<input class="field" type="text" name="email" id="email" size="23" />
+					<label>Haga clic en Registrar para continuar con el registro.</label>
+					<input type="submit" name="submit" value=" Registrar " class="bt_register" />
+				</form>
+			</div>
+		</div>
+</div> <!-- /login -->	
+
+	<!-- The tab on top -->	
+	<div class="tab">
+		<ul class="login">
+			<li class="left">&nbsp;</li>
+			<li>Bienvenido!</li>
+			<li class="sep">|</li>
+			<li id="toggle">
+				<a id="open" class="open" href="#">Ingreso | Registro</a>
+				<a id="close" style="display: none;" class="close" href="#">Cerrar Panel</a>
+			</li>
+			<li class="right">&nbsp;</li>
+		</ul> 
+	</div> <!-- / top -->
+	
+</div> <!--panel -->
+
+    <div id="container">
+		
+		<div id="content" style="padding-top:100px;">
+			<div id="banner1">
+				<img src="banner1.jpg">
+			</div>
+			<div id="conttext">
+			<h1>Gastro</h1>
+			<h2>¿Qué es Gastro?</h2>
+			<p>Gastro es un completo sistema de gestión de recintos con venta de comida y bebestibles, como bares, pubs, restaurantes y centros de eventos.</p>
+			
+			<p class="highlight">Dicho sistema incluye módulos de gestión de pedidos a proveedores, pedidos de las mesas, balance general de la cadena, o de determinados recintos, entre otras cosas.</p>
+							
+			<h2>¿Quién puede usar el sistema?</h2>
+			<ul>
+				<li>Personas que deseen conocer recomendaciones en base a su ubicación y gustos</li>
+				<li>Dueños de cadenas de comida rápida, restaurants, pubs, bares.</li>
+				<li>Proveedores de suministros para los recintos con venta de comida y/o bebestibles.</li>
+			</ul>
+			</div>
+			<div id="banner1">
+				<img src="banner1.jpg">
+			</div>
+			
+		</div>
+		&nbsp;
+		<img src="banner2.jpg">
+		<!-- / content -->		
+	</div><!-- / container -->
+</body>
+</html>

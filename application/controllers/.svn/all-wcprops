@@ -1,0 +1,173 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/PointOfSale/!svn/ver/777/application/controllers
+END
+deliveries.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/PointOfSale/!svn/ver/739/application/controllers/deliveries.php
+END
+no_access.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/PointOfSale/!svn/ver/339/application/controllers/no_access.php
+END
+receivings.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/PointOfSale/!svn/ver/777/application/controllers/receivings.php
+END
+reports.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/PointOfSale/!svn/ver/762/application/controllers/reports.php
+END
+barcode.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/PointOfSale/!svn/ver/221/application/controllers/barcode.php
+END
+campaign_offer.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/PointOfSale/!svn/ver/339/application/controllers/campaign_offer.php
+END
+employees.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/PointOfSale/!svn/ver/730/application/controllers/employees.php
+END
+enterprises.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/PointOfSale/!svn/ver/739/application/controllers/enterprises.php
+END
+config.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/PointOfSale/!svn/ver/739/application/controllers/config.php
+END
+giftcards.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/PointOfSale/!svn/ver/221/application/controllers/giftcards.php
+END
+sales.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/PointOfSale/!svn/ver/777/application/controllers/sales.php
+END
+login.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/PointOfSale/!svn/ver/772/application/controllers/login.php
+END
+person_controller.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/PointOfSale/!svn/ver/221/application/controllers/person_controller.php
+END
+dineroMailer.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/PointOfSale/!svn/ver/674/application/controllers/dineroMailer.php
+END
+bannerclick.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/PointOfSale/!svn/ver/551/application/controllers/bannerclick.php
+END
+subsidaries.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/PointOfSale/!svn/ver/739/application/controllers/subsidaries.php
+END
+secure_area.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/PointOfSale/!svn/ver/221/application/controllers/secure_area.php
+END
+campaign.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/PointOfSale/!svn/ver/730/application/controllers/campaign.php
+END
+advisers.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/PointOfSale/!svn/ver/771/application/controllers/advisers.php
+END
+languagecheck.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/PointOfSale/!svn/ver/221/application/controllers/languagecheck.php
+END
+items.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/PointOfSale/!svn/ver/766/application/controllers/items.php
+END
+dineroMailerSecure.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/PointOfSale/!svn/ver/772/application/controllers/dineroMailerSecure.php
+END
+cafeteria.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/PointOfSale/!svn/ver/739/application/controllers/cafeteria.php
+END
+index.html
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/PointOfSale/!svn/ver/221/application/controllers/index.html
+END
+customers.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/PointOfSale/!svn/ver/339/application/controllers/customers.php
+END
+register.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/PointOfSale/!svn/ver/772/application/controllers/register.php
+END
+suppliers.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/PointOfSale/!svn/ver/339/application/controllers/suppliers.php
+END
+home.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/PointOfSale/!svn/ver/772/application/controllers/home.php
+END

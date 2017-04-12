@@ -1,0 +1,49 @@
+<?php $this->load->view("partial/header"); ?>
+<script type="text/javascript">
+$(document).ready(function()
+{
+    $("#show_deleted").click(function()
+    {
+    	$('#show_deleted_form').submit();
+    });
+
+});
+</script>
+<div id="title_bar">
+	<div id="title" class="float_left"
+             ><?php echo $this->lang->line('common_list_of').' '.$this->lang->line('module_'.$controller_name); ?>
+        </div>
+        <div id="new_button" style="margin-right: 130px; margin-bottom: 10px;">
+        <?php echo form_open("$controller_name/index",array('id'=>'show_deleted_form')); ?>
+        <?php echo form_checkbox(array('name'=>'show_deleted','id'=>'show_deleted','value'=>1,'checked'=> $show_deleted)).' '.$this->lang->line($controller_name.'_show_all');?>
+        </form>
+        </div>
+
+        <div id="new_button">
+		<?php 		
+		echo anchor("$controller_name/createEnterprise/-1/width:360",	
+		"<div class='big_button'><span>".$this->lang->line($controller_name.'_new')."</span></div>",
+		array('class'=>'thickbox none','title'=>$this->lang->line($controller_name.'_new')));
+		?>
+	</div> 
+<!--        <div id="new_button" style="margin-right: 150px;">
+		<?php 		
+		//echo anchor("$controller_name/dailycheck/",	
+		//"<div class='big_button'><span>Daily check</span></div>",
+		//array('style'=>'text-decoration: none','title'=>$this->lang->line($controller_name.'_new')));
+		?>
+	</div>-->
+</div>
+
+<div id="table_holder" style="margin-bottom:<?php echo $margin.'px'; ?> ">
+	<?php echo $manage_table; ?>
+</div>
+<div id="feedback_bar"></div>
+<?php $this->load->view("partial/footer"); ?>
+
+
+<?php if(isset($success_msg) && $success_msg){ ?>
+    <script type="text/javascript" language="javascript">
+        set_feedback('<?php echo $success_msg; ?>', '<?php echo $success == 1 ? 'success_message' :'error_message'; ?>',false);
+    </script>
+<?php } ?> 

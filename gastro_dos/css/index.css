@@ -1,0 +1,36 @@
+/* CSS Document */
+
+#TODO
+{
+/*background-color: #A2C0CC;*/
+width: 475px;
+margin:0 auto;
+position: relative;
+top: -200px;
+left: -250px
+}
+
+#languageBox
+{
+    width: auto;
+    margin: 25px auto;
+    margin-left: 75%;
+    position: absolute;
+}
+
+#componente
+{
+/*background-color:#A2C0CC;*/
+padding-top:70px;
+width:100%;
+margin:0 auto;
+
+}
+
+#galleria
+{
+width:500px;
+height:200px;
+margin:0 auto;
+
+}

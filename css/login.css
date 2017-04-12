@@ -1,0 +1,204 @@
+body
+{
+	margin:0px;
+	padding:0px;
+	background-color:#f7f7f7;
+	text-align:center;
+}
+
+
+p{
+	margin-bottom:20px;
+	text-align:justify;
+}
+#container
+{
+	position:relative;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:20px;
+	width:360px;
+	left: 250px;
+	top: 50px;
+	
+}
+
+#top
+{
+	position:relative;
+	width:100%;
+	height:20px;
+	padding:2px;
+	background-color:#005B7F;
+	text-align:center;
+	font-family:Verdana;
+	color:white;
+	font-size:12pt;
+}
+
+#login_form
+{
+	position:relative;
+	width:100%;
+	height:230px;
+	padding:2px;	
+	font-family:Verdana;
+	color:white;
+	font-size:10pt;
+	background-color:#A7A7A7;
+}
+
+#welcome_message
+{
+	text-align:center;
+	margin-top:10px;
+	margin-bottom:20px;
+}
+
+.error
+{
+	margin:0 auto;
+	border:3px solid #d3153b;
+	background-color:#fbe6f2;
+	padding:5px;
+	width:80%;
+	text-align:center;
+	font-size:18px;
+	margin-bottom:20px;
+	
+}
+
+.error2
+{
+	margin:5px;	
+	color:red;
+	padding:5px;
+	width:80%;
+	text-align:center;
+	font-weight:bold;
+		
+	/*margin-bottom:20px;*/
+	
+}
+
+.form_field_label
+{
+	float:left;
+	margin-left:20px;
+	width:30%;
+}
+
+.form_field
+{
+	float:left;
+	/*width:30%;*/
+}
+
+#submit_button
+{
+	position:absolute;
+	bottom:60px;
+	right:60px;
+}
+
+#pass_recover
+{
+	position:absolute;
+	bottom:30px;
+	right:60px;
+}
+
+input
+{
+	font-family:Arial;
+}
+
+#new_button
+{
+	position:absolute;
+	bottom:10px;
+	right:5px;
+}
+
+/*OSCAR*/
+#menubar1
+{
+	
+	margin:0px;
+	padding:0px;
+	background-image: url("../images/menubar/menubar_bg2.bmp"); 
+	background-repeat: repeat-x;
+	width:100%;
+	height:100px;
+	color:#FFFFFF;
+        font-size:14pt;
+        
+}
+
+#bola
+{ 
+	float: left;
+	/*background-image: url("../images/menubar/config.png");
+	width:48px;
+	height:48px;*/
+	margin: 5px 10px 10px 20px;
+}
+#mymenu2 
+{	
+
+	width: 270px;
+	margin: 0 auto;
+}
+#mymenu
+{
+	float: left;
+	width: 100%; 
+	margin: 25px auto;
+	text-align:center;
+        position: absolute;
+}
+
+#mymenu a
+{
+	padding: 0px 8px;
+	color: #FFFFFF;
+	font-family: verdana;
+	font-size: 10pt;
+}
+
+#mymenu a:hover
+{
+	color: #cccccc;
+	text-decoration: none;
+}
+
+#other_links
+{
+	
+	float: left;
+	margin: 78px auto;
+	width: 100%;
+	text-align: center;
+        position: absolute;	
+}
+
+#other_links a
+{
+	font-weight:bold;
+	padding: 3px 15px;
+	color: #ffffff;
+	font-family: verdana;
+	font-size: 12pt;
+	/*background:#ADADAD;*/
+	/*border-radius: 20px;*/
+}
+
+#other_links a:hover
+{
+	text-decoration: none;
+	color: #dddddd;
+}
+
+
+
+
